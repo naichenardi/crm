@@ -1,8 +1,10 @@
-package com.nardi.crm.controllers;
+package com.nardi.crm.controllers.user;
 
 import com.nardi.crm.entities.User;
+import com.nardi.crm.exception.CrmHttpException;
 import com.nardi.crm.repository.UserRepository;
 import com.nardi.crm.services.ProducerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +52,7 @@ public class UserController {
             updatedUser.setPassword(userUpdate.getPassword());
             return ResponseEntity.ok(userRepository.save(updatedUser));
         } else {
-            return ResponseEntity.notFound().build();
+            throw new CrmHttpException(String.format("User '%s' not found", id), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -60,7 +62,7 @@ public class UserController {
             userRepository.deleteById(id);
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            throw new CrmHttpException(String.format("User '%s' not found", id), HttpStatus.NOT_FOUND);
         }
     }
 }
