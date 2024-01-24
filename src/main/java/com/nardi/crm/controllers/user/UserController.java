@@ -39,7 +39,7 @@ public class UserController {
     @PostMapping
     public User createUser(@RequestBody User user) {
         User saved = userRepository.save(user);
-        this.producerService.send(USER_CREATED_TOPIC, saved.getTopicKey(), saved);
+        this.producerService.send(USER_CREATED_TOPIC, saved);
         return saved;
     }
 
@@ -50,6 +50,9 @@ public class UserController {
             User updatedUser = user.get();
             updatedUser.setUsername(userUpdate.getUsername());
             updatedUser.setPassword(userUpdate.getPassword());
+
+            this.producerService.send(USER_UPDATED_TOPIC,  updatedUser);
+
             return ResponseEntity.ok(userRepository.save(updatedUser));
         } else {
             throw new CrmHttpException(String.format("User '%s' not found", id), HttpStatus.NOT_FOUND);
@@ -58,9 +61,11 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        if (userRepository.existsById(id)) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
             userRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
+            this.producerService.send(USER_DELETED_TOPIC,  user.get());
+            return ResponseEntity.ok().build();
         } else {
             throw new CrmHttpException(String.format("User '%s' not found", id), HttpStatus.NOT_FOUND);
         }

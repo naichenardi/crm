@@ -7,6 +7,9 @@ spring:
       bootstrap-servers: localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        topic:
+          name: crm.users.topic
   jpa:
     hibernate:
       ddl-auto: update

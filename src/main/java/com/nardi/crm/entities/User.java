@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -56,8 +57,21 @@ public class User {
         }
     }
 
-    @JsonIgnore
-    public String getTopicKey() {
-        return UUID.randomUUID().toString().concat("#").concat(getId().toString());
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (!Objects.equals(id, user.id)) return false;
+        return Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        return result;
     }
 }
