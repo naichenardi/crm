@@ -11,6 +11,7 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
+          cache: gradle
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build with Gradle
