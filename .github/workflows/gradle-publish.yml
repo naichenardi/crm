@@ -20,6 +20,8 @@ jobs:
     needs: [setup]
     runs-on: ubuntu-latest
     steps:
+      - name: Get code
+        uses: actions/checkout@v3
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build with Gradle
