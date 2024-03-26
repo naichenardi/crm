@@ -16,10 +16,6 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
           cache: gradle
-  build:
-    needs: [setup]
-    runs-on: ubuntu-latest
-    steps:
       - name: Get code
         uses: actions/checkout@v3
       - name: Make gradlew executable
