@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  test:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -16,6 +16,10 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
           cache: gradle
+  build:
+    needs: [setup]
+    runs-on: ubuntu-latest
+    steps:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build with Gradle
